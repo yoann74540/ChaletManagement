@@ -4,80 +4,93 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion Chauffage</title>
-<style>
-    /* Fond d'écran */
+  <style>
+    /* Fond plein écran */
     body {
       margin: 0;
       padding: 0;
-      height: 100vh; /* plein écran */
-      background-image: url('Chalet_picture.jpg'); /* ton image ici */
-      background-size: cover; /* couvre tout l'écran */
-      background-position: center; /* centre l'image */
+      height: 100vh;
+      background-image: url('Chalet_picture.jpg'); /* ton image de fond */
+      background-size: cover;
+      background-position: center;
       background-repeat: no-repeat;
       font-family: Arial, sans-serif;
-      display: flex; /* pour centrer le contenu */
-      justify-content: center; /* horizontal */
-      align-items: center; /* vertical */
+
+      /* Centre tout verticalement et horizontalement */
+      display: flex;
+      justify-content: center; /* centre horizontal */
+      align-items: center;     /* centre vertical */
     }
 
     /* Conteneur du formulaire */
     #auth {
-      background-color: rgba(255, 255, 255, 0.8); /* fond semi-transparent */
-      padding: 30px;
-      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.85); /* fond semi-transparent */
+      padding: 40px 30px;
+      border-radius: 12px;
       text-align: center;
+      width: 90%;
+      max-width: 350px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
+    /* Titre centré */
+    #auth h2 {
+      margin-bottom: 25px;
+      font-size: 28px;
+      color: #333;
+    }
+
+    /* Inputs */
     input {
       display: block;
       margin: 10px auto;
-      padding: 10px;
+      padding: 12px;
       width: 80%;
       border-radius: 5px;
       border: 1px solid #ccc;
+      font-size: 16px;
     }
 
-    button {
-      padding: 10px 20px;
-      margin: 5px;
+    /* Boutons */
+    .btn {
+      padding: 12px 25px;
+      margin: 10px 5px 0 5px;
       border-radius: 5px;
       border: none;
       background-color: #FF5733;
       color: white;
       cursor: pointer;
       font-size: 16px;
+      width: 40%;
     }
 
-    button:hover {
+    .btn:hover {
       background-color: #e64c2b;
+    }
+
+    /* Optionnel : place les deux boutons côte à côte */
+    #buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-  <h2>Connexion</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Mot de passe">
-  <button id="loginBtn">Se connecter</button>
-  <button id="signupBtn">Créer un compte</button>
+  <div id="auth">
+    <h2>Connexion</h2>
 
-  <p id="status"></p>
+    <!-- Zone texte email -->
+    <input type="email" placeholder="Email" id="email">
 
-  <script>
-    const loginBtn = document.getElementById("loginBtn");
-    const signupBtn = document.getElementById("signupBtn");
-    const status = document.getElementById("status");
+    <!-- Zone texte mot de passe -->
+    <input type="password" placeholder="Mot de passe" id="password">
 
-    loginBtn.addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      status.textContent = `Login: ${email} / ${password}`;
-    });
-
-    signupBtn.addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      status.textContent = `Signup: ${email} / ${password}`;
-    });
-  </script>
+    <!-- Boutons côte à côte -->
+    <div id="buttons">
+      <button class="btn" id="loginBtn">Se connecter</button>
+      <button class="btn" id="signupBtn">Créer un compte</button>
+    </div>
+  </div>
 </body>
 </html>
