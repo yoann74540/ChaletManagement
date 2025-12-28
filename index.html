@@ -2,9 +2,19 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Connexion Chauffage</title>
   <style>
+    html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    touch-action: none;
+    }
     /* Fond plein écran */
     body {
       margin: 0;
@@ -20,6 +30,7 @@
       display: flex;
       justify-content: center; /* centre horizontal */
       align-items: center;     /* centre vertical */
+      overscroll-behavior: none;
     }
 
     /* Conteneur du formulaire */
@@ -31,6 +42,10 @@
       width: 90%;
       max-width: 350px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      padding-top: env(safe-area-inset-top);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
     /* Titre centré */
