@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion Chauffage</title>
+</head>
+<body>
+  <h2>Connexion</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Mot de passe">
+  <button id="loginBtn">Se connecter</button>
+  <button id="signupBtn">Créer un compte</button>
+
+  <p id="status"></p>
+
+  <script>
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const status = document.getElementById("status");
+
+    loginBtn.addEventListener("click", () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      status.textContent = `Login: ${email} / ${password}`;
+    });
+
+    signupBtn.addEventListener("click", () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      status.textContent = `Signup: ${email} / ${password}`;
+    });
+  </script>
+</body>
+</html>
