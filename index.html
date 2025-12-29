@@ -87,8 +87,8 @@
 
   <!-- BARRE BASSE -->
   <div id="bottom-bar">
-    <button class="tab active"><i class="fa-solid fa-house"></i></button>
-    <button class="tab" onclick="document.getElementById('help-modal').style.display='block'"><i class="fa-solid fa-circle-info"></i></button>
+    <button class="tab active" id="homeBtn" onclick="showHome()"><i class="fa-solid fa-house"></i></button>
+    <button class="tab" id="helpBtn" onclick="showHelp()"><i class="fa-solid fa-circle-info"></i></button>
   </div>
 
   <div id="help-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); color:white; padding:20px; box-sizing: border-box; z-index: 9999;">
@@ -103,8 +103,27 @@
       </ul>
       <h3>Contactez-nous</h3>
       <p>Si vous avez besoin d'aide supplémentaire, veuillez nous contacter à support@chaletmanagement.fr</p>
+      <button onclick="showHome()">Fermer</button>
     </div>
   </div>
+
+  <script>
+    function showHelp() {
+      document.getElementById('help-modal').style.display = 'block';
+
+      //active le bouton i
+      document.getElementById('helpBtn').classList.add('active');
+      document.getElementById('homeBtn').classList.remove('active');
+    }
+
+    function showHome() {
+      document.getElementById('help-modal').style.display = 'none';
+
+      //active le bouton home
+      document.getElementById('homeBtn').classList.add('active');
+      document.getElementById('helpBtn').classList.remove('active');
+    }
+  </script>
 
 </body>
 </html>
