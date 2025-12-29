@@ -74,10 +74,23 @@
     .tab.active {
       color: #007AFF; /* bleu iOS */
     }
+
+    .background {
+      position: absolute;
+      top: env(safe-area-inset-top);
+      left: 0;
+      right: 0;
+      bottom: calc(env(safe-area-inset-bottom) + 60px);
+      width: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
   </style>
 </head>
 
 <body>
+
+  <img class="background" src="Chalet_picture.jpg" alt="Fond">
 
   <!-- BARRE BASSE -->
   <div id="bottom-bar">
