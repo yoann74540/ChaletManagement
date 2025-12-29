@@ -12,11 +12,22 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.firestore();
+
+auth.setPersistence(
+  firebase.auth.Auth.Persistence.NONE
+  ).then(() => {
+    console.log('Auth persistence set to NONE');
+  }).catch((error) => {
+    console.error('Error setting auth persistence:', error);
+  });
 
 // create a new user
 document.getElementById('signupBtn').addEventListener('click', () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+
+    firebase.auth().signOut();
 
     auth.createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
@@ -36,6 +47,8 @@ document.getElementById('loginBtn').addEventListener('click', () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
+    firebase.auth().signOut();
+
     auth.signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
        const user = userCredential.user;
@@ -44,7 +57,38 @@ document.getElementById('loginBtn').addEventListener('click', () => {
          firebase.auth().signOut();
          return;
        }
-        alert('User logged in successfully!');
+        console.log('user logger in successfully: ' + user.email);
       })
     .catch((error) => { alert(error.message); });
+});
+
+auth.onAuthStateChanged(async (user) => {
+
+  if (!user || !user.emailVerified) return;
+
+  console.log('user.email: ' + user.email);
+  console.log('user.uid: ' + user.uid);
+   
+  try{
+    const userDoc = await db.collection('users').doc(user.uid).get();
+    
+    if(!userDoc.exists){
+        alert('Email refuse , No acess rights. Contact admin.');
+        await auth.signOut();
+        return;
+    }
+    const userData = userDoc.data();
+    if( (userData.enabled !== true ) || (userData.email !== user.email) ){
+        alert('No acess rights. Contact admin.');
+        await auth.signOut();
+        return;
+    }
+        
+    alert('Access granted. Welcome!');
+
+  } catch(error){
+    alert('Error checking user access rights: ' + error.message);
+    await auth.signOut();
+    return;
+  }
 });
