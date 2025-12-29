@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8">
 
-  <!-- CRUCIAL pour iPhone -->
+  <!-- iOS PWA -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
+  <title>Chauffage</title>
 
-  <title>Test Image Plein Écran</title>
+  <!-- Icônes -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
     html, body {
@@ -18,25 +21,70 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      touch-action: none;
-      overscroll-behavior: none;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #F2F2F7; /* gris iOS */
     }
 
     body {
-      min-height: 100dvh; /* clé iOS */
-      background-image: url('Chalet_picture.jpg');
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      outline: 3px solid red;
-    }
-    
-   #auth {
-      padding-bottom: calc(40px + env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
     }
 
+    /* CONTENU PRINCIPAL */
+    #content {
+      flex: 1;
+      padding: 20px;
+      padding-top: calc(20px + env(safe-area-inset-top));
+      padding-bottom: calc(20px + env(safe-area-inset-bottom) + 60px);
+      box-sizing: border-box;
+    }
+
+    /* BARRE iOS BASSE */
+    #bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+
+      height: 60px;
+      padding-bottom: env(safe-area-inset-bottom);
+
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      background-color: #A8E6CF;
+      border-top: 1px solid rgba(0,0,0,0.15);
+
+      z-index: 1000;
+    }
+
+    .tab {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: #004D00;
+    }
+
+    .tab.active {
+      color: #007AFF; /* bleu iOS */
+    }
   </style>
 </head>
+
 <body>
+
+  <!-- CONTENU -->
+  <div id="content">
+    <h2>Connexion</h2>
+    <p>Contenu de l’application</p>
+  </div>
+
+  <!-- BARRE BASSE -->
+  <div id="bottom-bar">
+    <button class="tab"><i class="fa-solid fa-gear"></i></button>
+    <button class="tab"><i class="fa-solid fa-circle-info"></i></button>
+  </div>
+
 </body>
 </html>
