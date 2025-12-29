@@ -1,7 +1,7 @@
 {
     "name": "Pilotage Chalet",
     "short_name": "Chalet",
-    "start_url": "/index.html",
+    "start_url": "/ChaletManagement/index.html",
     "display": "standalone",
     "background_color": "#F2F2F7",
     "theme_color": "#A8E6CF",
