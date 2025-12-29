@@ -13,14 +13,21 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-
 // create a new user
 document.getElementById('signupBtn').addEventListener('click', () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
     auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => { alert('User created successfully!'); })
+    .then((userCredential) => {
+      const user = userCredential.user;
+      // Send email verification
+      user.sendEmailVerification()
+        .then(() => {
+          alert('User created successfully! Please verify your email before logging in.');
+        })
+        .catch((error) => { alert(error.message); });
+      })
     .catch((error) => { alert(error.message); });
 });
 
@@ -30,6 +37,14 @@ document.getElementById('loginBtn').addEventListener('click', () => {
     const password = document.getElementById('password').value;
 
     auth.signInWithEmailAndPassword(email, password)
-    .then((userCredential) => { alert('User logged in successfully!'); })
+    .then((userCredential) => {
+       const user = userCredential.user;
+       if (!user.emailVerified) {
+         alert('Email not verified. Please verify your email before logging in.');
+         firebase.auth().signOut();
+         return;
+       }
+        alert('User logged in successfully!');
+      })
     .catch((error) => { alert(error.message); });
 });
