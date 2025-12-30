@@ -71,15 +71,9 @@ auth.onAuthStateChanged(async (user) => {
    
   try{
     const userDoc = await db.collection('users').doc(user.uid).get();
-    
-    if(!userDoc.exists){
-        alert('Email refuse , No acess rights. Contact admin.');
-        await auth.signOut();
-        return;
-    }
-    const userData = userDoc.data();
-    if( (userData.enabled !== true ) || (userData.email !== user.email) ){
-        alert('No acess rights. Contact admin.');
+
+    if( userDoc.data().email !== user.email ){
+        alert('Email refused , no acess rights. Contact admin.');
         await auth.signOut();
         return;
     }
