@@ -35,11 +35,11 @@ document.getElementById('signupBtn').addEventListener('click', () => {
       // Send email verification
       user.sendEmailVerification()
         .then(() => {
-          alert('User created successfully! Please verify your email before logging in.');
+          showWarning("Veuillez vérifier votre email avant de vous connecter.");
         })
         .catch((error) => { alert(error.message); });
       })
-    .catch((error) => { alert(error.message); });
+    .catch((error) => { showError("Erreur lors de la création du compte"); });
 });
 
 // login existing user
@@ -53,13 +53,13 @@ document.getElementById('loginBtn').addEventListener('click', () => {
     .then((userCredential) => {
        const user = userCredential.user;
        if (!user.emailVerified) {
-         alert('Email not verified. Please verify your email before logging in.');
+         showError("Email non verifié, veuillez verifier votre email avant de vous connecter.");
          firebase.auth().signOut();
          return;
        }
         console.log('user logger in successfully: ' + user.email);
       })
-    .catch((error) => { alert(error.message); });
+    .catch((error) => { showError("Email non valide ou mot de passe incorrect"); });
 });
 
 auth.onAuthStateChanged(async (user) => {
@@ -73,7 +73,7 @@ auth.onAuthStateChanged(async (user) => {
     const userDoc = await db.collection('users').doc(user.uid).get();
 
     if( userDoc.data().email !== user.email ){
-        alert('Email refused , no acess rights. Contact admin.');
+        showError("Email refusé, pas de droits d'accès. Contactez l'administrateur.");
         await auth.signOut();
         return;
     }
@@ -81,7 +81,7 @@ auth.onAuthStateChanged(async (user) => {
     alert('Access granted. Welcome!');
 
   } catch(error){
-    alert('Error checking user access rights: ' + error.message);
+    showError("Erreur lors de la vérification des droits d'accès. Contactez l'administrateur.");  
     await auth.signOut();
     return;
   }

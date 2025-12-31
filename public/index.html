@@ -161,6 +161,47 @@
     .btn.secondary:active {
       background-color: #81C784;
     }
+
+    .message {
+      position: fixed;
+      top: calc(env(safe-area-inset-top)+10px);
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 90%;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      z-index: 20;
+      animation: slideDown 0.3s ease;
+    }
+
+    .message.error {
+      background-color: #FF3B30;
+      color: white;
+    }
+
+    .message.warning {
+      background-color: #FF9500;
+      color: #1C1C1E;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%, 0);
+      }
+    }
+
   </style>
 </head>
 
@@ -223,11 +264,15 @@
     </div>
   </div>
   
+  <script src="ui.js"></script>
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="auth.js"></script>
+
+  <div id="message-box" class="message hidden"></div>
 
 </body>
 </html>
