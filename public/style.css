@@ -66,7 +66,7 @@
     .background {
       position: absolute;
       inset: 0 calc(0px) calc(env(safe-area-inset-bottom) + 60px) 0;
-      background-image: url('picture/Chalet_picture.jpg');
+      background-image: url('picture/Chalet_picture.webp');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
