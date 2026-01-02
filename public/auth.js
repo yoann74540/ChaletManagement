@@ -14,6 +14,8 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+let pageInitialized = false;
+
 auth.setPersistence(
   firebase.auth.Auth.Persistence.NONE
   ).then(() => {
@@ -22,49 +24,69 @@ auth.setPersistence(
     console.error('Error setting auth persistence:', error);
   });
 
-// create a new user
-document.getElementById('signupBtn').addEventListener('click', () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+const signupBtn = document.getElementById('signupBtn');
+if( signupBtn ){
+  // create a new user
+  signupBtn.addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-    firebase.auth().signOut();
+      firebase.auth().signOut();
 
-    auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      // Send email verification
-      user.sendEmailVerification()
-        .then(() => {
-          showWarning("Veuillez vérifier votre email avant de vous connecter.");
+      auth.createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        // Send email verification
+        user.sendEmailVerification()
+          .then(() => {
+            showWarning("Veuillez vérifier votre email avant de vous connecter.");
+          })
+          .catch((error) => { alert(error.message); });
         })
-        .catch((error) => { alert(error.message); });
-      })
-    .catch((error) => { showError("Erreur lors de la création du compte"); });
-});
+      .catch((error) => { showError("Erreur lors de la création du compte"); });
+  });
+}
 
-// login existing user
-document.getElementById('loginBtn').addEventListener('click', () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+const loginBtn = document.getElementById('loginBtn');
+if( loginBtn ){
+    // login existing user
+  loginBtn.addEventListener('click', () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
 
-    firebase.auth().signOut();
+      firebase.auth().signOut();
 
-    auth.signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-       const user = userCredential.user;
-       if (!user.emailVerified) {
-         showError("Email non verifié, veuillez verifier votre email avant de vous connecter.");
-         firebase.auth().signOut();
-         return;
-       }
-        console.log('user logger in successfully: ' + user.email);
-      })
-    .catch((error) => { showError("Email non valide ou mot de passe incorrect"); });
+      auth.signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        if (!user.emailVerified) {
+          showError("Email non verifié, veuillez verifier votre email avant de vous connecter.");
+          firebase.auth().signOut();
+          return;
+        }
+          console.log('user logger in successfully: ' + user.email);
+        })
+      .catch((error) => { showError("Email non valide ou mot de passe incorrect"); });
+  });
+}
+
+document.getElementById("confirmLogoutBtn").addEventListener("click", async ()=> {
+  document.getElementById("confirm-logout").classList.add("hidden");
+  signOutAndRedirect();
 });
 
 auth.onAuthStateChanged(async (user) => {
 
-  if (!user || !user.emailVerified) return;
+  if(!pageInitialized){
+    document.body.style.visibility="visible";
+    console.log('Page initilized');
+    pageInitialized = true;
+  }
+
+  if (!user || !user.emailVerified){
+    renderBottomBar(null);
+    return;
+  }
 
   console.log('user.email: ' + user.email);
   console.log('user.uid: ' + user.uid);
@@ -74,15 +96,25 @@ auth.onAuthStateChanged(async (user) => {
 
     if( userDoc.data().email !== user.email ){
         showError("Email refusé, pas de droits d'accès. Contactez l'administrateur.");
-        await auth.signOut();
+        signOutAndRedirect();
         return;
     }
         
-    alert('Access granted. Welcome!');
+    renderBottomBar(user);
 
   } catch(error){
     showError("Erreur lors de la vérification des droits d'accès. Contactez l'administrateur.");  
-    await auth.signOut();
+    signOutAndRedirect();
     return;
   }
 });
+
+async function signOutAndRedirect() {
+  try{
+    await auth.signOut();
+    renderBottomBar(null);
+    console.log('User signed out successfully');
+  } catch(error){
+    console.error('Error signing out:', error);
+  }
+}

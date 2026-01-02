@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <style>
+    body{
+      visibility: hidden;
+    }
+  </style>
   <title>Chauffage</title>
   <script>
     fetch('head-common.html')
@@ -47,6 +52,41 @@
       <div class="buttons">
         <button class="btn primary" id="loginBtn">Se connecter</button>
         <button class="btn secondary" id="signupBtn">Créer un compte</button>
+      </div>
+    </div>
+
+    <div id="gauge-modal" class="hidden"> 
+      <h2>Pilotage</h2>
+
+      <div class="temp-card">
+        <span class="temp-value">21.5</span>
+        <span class="temp-unit">°C</span>
+        <div class="temp-label">Temperature intérieure</div>
+      </div>
+
+      <div class ="setting-row">
+        <span class="setting-label">Chauffage actif</span>
+
+        <label class="ios-switch">
+          <input type="checkbox" id="heaterToggle">
+          <span class="slider"></span>
+      </div>
+    </div>
+
+    <div id="settings-panel" class="hidden">
+      <button class="parameter-btn danger" id="logoutBtn">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Se déconnecter
+      </button>
+    </div>
+
+    <div id="confirm-logout" class="hidden">
+      <div class="confirm-box">
+        <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+        <div class="confirm-actions">
+          <button class="btn trois" id="cancelLogoutBtn">Annuler</button>
+          <button class="btn danger" id="confirmLogoutBtn">Se déconnecter</button>
+        </div> 
       </div>
     </div>
   </div>
