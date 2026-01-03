@@ -6,13 +6,17 @@ document.addEventListener("DOMContentLoaded", () => {
 const heaterToggle = document.getElementById("heaterToggle");
 if (heaterToggle) {
   heaterToggle.addEventListener("change", (event) => {
+    let message = "UNKNOW";
     if (heaterToggle.checked) {
       console.log("Heater turned ON");
       setTemperature(22); // Example temperature when heater is ON
+      message = "ON";
     } else {
       console.log("Heater turned OFF");
+      message = "OFF"
       setTemperature(16); // Example temperature when heater is OFF
     }
+    const result = sendMQTTMEssage("chauffage", message);
   });
 }
 
