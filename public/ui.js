@@ -19,9 +19,10 @@ if (heaterToggle) {
       console.log("Etat chauffage enregistré :", message);
       setTemperature(isOn ? 21: 16); // Example temperature when heater is OFF
     } catch(err){
-      console.log("Erreur chauffage;", err);
-      showError("Impossible de changer l'etat du chauffage");
-
+      if(err.name !== "MqttLimitError" ){
+        console.log("Erreur chauffage;", err);
+        showError("Impossible de changer l'etat du chauffage");
+      }
       heaterToggle.checked = !isOn;
     }
   });
