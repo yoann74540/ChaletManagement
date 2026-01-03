@@ -15,6 +15,7 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 let pageInitialized = false;
+let unsubscribeHeater = null;
 
 auth.setPersistence(
   firebase.auth.Auth.Persistence.NONE
@@ -101,6 +102,8 @@ auth.onAuthStateChanged(async (user) => {
     }
         
     renderBottomBar(user);
+    updateData();
+    subscribeHeaterState();
 
   } catch(error){
     showError("Erreur lors de la vérification des droits d'accès. Contactez l'administrateur.");  
@@ -111,10 +114,46 @@ auth.onAuthStateChanged(async (user) => {
 
 async function signOutAndRedirect() {
   try{
+    cleanupSubsriptionHeaterState();
     await auth.signOut();
     renderBottomBar(null);
     console.log('User signed out successfully');
   } catch(error){
     console.error('Error signing out:', error);
+  }
+}
+
+async function updateData(){
+  try{
+    const doc = await db.collection("system").doc("state").get();
+
+    if(doc.exists){
+      const state = doc.data();
+      let value = false;
+      value = (state.heater == "ON") ? true : false;
+      heaterToggle.checked = !!value;
+    }else{
+      heaterToggle.checked = false;
+    }
+  }catch (err){
+    console.error("Erreur de la lecture de l'etat du chauffage");
+  }
+} 
+
+function subscribeHeaterState(){
+  unsubscribeHeater = db.collection("system").doc("state").onSnapshot((doc) => {
+      if(doc.exists){
+        const state = doc.data();
+        let value = false;
+        value = (state.heater == "ON") ? true : false;
+        heaterToggle.checked = !!value;
+      }
+    });
+}
+
+function cleanupSubsriptionHeaterState(){
+  if(unsubscribeHeater){
+    unsubscribeHeater();
+    unsubscribeHeater = null;
   }
 }

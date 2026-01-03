@@ -5,18 +5,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const heaterToggle = document.getElementById("heaterToggle");
 if (heaterToggle) {
-  heaterToggle.addEventListener("change", (event) => {
-    let message = "UNKNOW";
-    if (heaterToggle.checked) {
-      console.log("Heater turned ON");
-      setTemperature(22); // Example temperature when heater is ON
-      message = "ON";
-    } else {
-      console.log("Heater turned OFF");
-      message = "OFF"
-      setTemperature(16); // Example temperature when heater is OFF
+  heaterToggle.addEventListener("change", async () => {
+    const isOn = heaterToggle.checked;
+    const message = isOn ? "ON": "OFF";
+
+    try{
+      await sendMQTTMEssage("chauffage", message);
+
+      await db.collection("system").doc("state").set({
+        heater: message,
+        updateAt: firebase.firestore.FieldValue.serverTimestamp()
+      },{merge: true});
+      console.log("Etat chauffage enregistré :", message);
+      setTemperature(isOn ? 21: 16); // Example temperature when heater is OFF
+    } catch(err){
+      console.log("Erreur chauffage;", err);
+      showError("Impossible de changer l'etat du chauffage");
+
+      heaterToggle.checked = !isOn;
     }
-    const result = sendMQTTMEssage("chauffage", message);
   });
 }
 
