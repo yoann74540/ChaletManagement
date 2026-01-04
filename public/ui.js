@@ -10,7 +10,7 @@ if (heaterToggle) {
     const message = isOn ? "ON": "OFF";
 
     try{
-      await sendMQTTMEssage("chauffage", message);
+      await sendMQTTMEssage("chauffage", isOn);
 
       await db.collection("system").doc("state").set({
         heater: message,

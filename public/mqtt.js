@@ -6,99 +6,50 @@ class MqttLimitError extends Error{
     }
 }
 
-async function  getMQTTCreadentials(){
-    const docRef = db.collection('MQTT').doc('credentials');
-    const docSnap = await docRef.get();
-
-    if(!docSnap.exists) throw new Error("MQTT credentials not found");
-
-    return docSnap.data();
-}
-
 async function sendMQTTMEssage(topic, message){
     try{
-        const creds = await getMQTTCreadentials();
+        const user = firebase.auth().currentUser;
+        if(!user){
+            showError("Utilisateur non connecté");
+            return;
+        }
 
-        await CanSendMQTT();
+        const token = await user.getIdToken();
 
-        const client = mqtt.connect('wss://io.adafruit.com:443',{
-            username: creds.username,
-            password: creds.key
-        });
+        const res = await fetch(
+            "https://mqtt-server-production-00a0.up.railway.app/heater",
+            {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer "+ token
+                },
+                body: JSON.stringify({ state: message }) // true or false
+            }
+        );
 
-        client.on('connect', ()=> {
-            console.log('MQTT connecté');
-            client.publish(`${creds.username}/feeds/${topic}`, message, {}, () => {
-                console.log('Message envoyé:', message);
-                setTimeout(()=>{
-                    client.end();
-                },100);
-            });
-        });
+        if(!res.ok){
+            let errorMessage = "Erreur inconnue"
 
-        client.on('error', (err) => {
-            console.log('Erreur MQTT', err);
-            client.end();
-        });
+            try{
+                const data = await res.json();
+                errorMessage = data.error || errorMessage;
+            }catch(err){
+                throw new Error("Erreur inconnue limit MQTT");
+            }
+            throw new MqttLimitError(errorMessage);
+        }
+
+        const data = await res.json();
+        console.log("MQTT OK:", data);
     } catch (err){
-        console.log(err.message);
+        console.log("Erreur MQTT:", err);
         if(err.name === "MqttLimitError"){
             showWarning(err.message);
             throw new MqttLimitError("Erreur sur les limit MQTT");
         }else{
+            console.log("Erreur MQTT:", err);
             throw new Error("Erreur envoie mqtt");
         }
     }
-}
-
-async function CanSendMQTT(){
-    const user = auth.currentUser;
-    if(!user){
-        throw new MqttLimitError("Utilisateur non connecté");
-    }
-
-    const now = Date.now();
-    const today = new Date().toISOString().slice(0, 10);
-
-    const limitsSnap = await db.doc("config/mqtt_limits").get();
-    if(!limitsSnap.exists){
-        throw new MqttLimitError("Limites MQTT absentes");
-    }
-
-    const limits = limitsSnap.data();
-
-    const usageRef = db.doc("system/mqtt_usage");
-    const usageSnap = await usageRef.get();
-
-    let usage = usageSnap.exists ? usageSnap.data() : {
-        minuteCount: 0,
-        minuteWindow: now,
-        dayCount: 0,
-        dayWindow:today
-    };
-
-    if( now - usage.minuteWindow > 60000){
-        usage.minuteWindow = now;
-        usage.minuteCount = 0;
-    }
-
-    if(usage.dayWindow !== today){
-        usage.dayWindow = today;
-        usage.dayCount = 0;
-    }
-
-    if(usage.minuteCount >= limits.maxPerMinute){
-        throw new MqttLimitError("Limite minute atteinte");
-    }
-
-    if(usage.dayCount >= limits.maxPerDay){
-        throw new MqttLimitError("Quota journalier atteint");
-    }
-
-    usage.minuteCount++;
-    usage.dayCount++;
-
-    await usageRef.set(usage, { merge: true });
-
-    return true;
 }
