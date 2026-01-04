@@ -11,12 +11,6 @@ if (heaterToggle) {
 
     try{
       await sendMQTTMEssage("chauffage", isOn);
-
-      await db.collection("system").doc("state").set({
-        heater: message,
-        updateAt: firebase.firestore.FieldValue.serverTimestamp()
-      },{merge: true});
-      console.log("Etat chauffage enregistré :", message);
       setTemperature(isOn ? 21: 16); // Example temperature when heater is OFF
     } catch(err){
       if(err.name !== "MqttLimitError" ){
