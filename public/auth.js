@@ -17,6 +17,9 @@ const db = firebase.firestore();
 let pageInitialized = false;
 let unsubscribeHeater = null;
 
+let pendingCommand = false;
+let commandTimeout = null;
+
 auth.setPersistence(
   firebase.auth.Auth.Persistence.NONE
   ).then(() => {
@@ -147,6 +150,12 @@ function subscribeHeaterState(){
         let value = false;
         value = (state.heater == "ON") ? true : false;
         heaterToggle.checked = !!value;
+        if(pendingCommand){
+          clearCommandTimeout();
+          pendingCommand = false;
+          hideLoading();
+          heaterToggle.disabled = false;
+        }
       }
     });
 }
@@ -155,5 +164,25 @@ function cleanupSubsriptionHeaterState(){
   if(unsubscribeHeater){
     unsubscribeHeater();
     unsubscribeHeater = null;
+  }
+}
+
+async function startCommandTimeout(){
+  clearTimeout(commandTimeout);
+
+  commandTimeout = setTimeout(() => {
+    console.log("Erreur timeout , time_id =",commandTimeout);
+    throw new Error("Timeout");
+  }, 8000);
+
+  console.log("Start timer, time_id =",commandTimeout);
+
+}
+
+function clearCommandTimeout(){
+  if(commandTimeout !== null){
+     console.log("Clear timer, time_id =",commandTimeout);
+    clearTimeout(commandTimeout);
+    commandTimeout = null;
   }
 }

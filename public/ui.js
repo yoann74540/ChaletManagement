@@ -7,15 +7,27 @@ const heaterToggle = document.getElementById("heaterToggle");
 if (heaterToggle) {
   heaterToggle.addEventListener("change", async () => {
     const isOn = heaterToggle.checked;
-    const message = isOn ? "ON": "OFF";
+
+    if(pendingCommand) return;
+
+    pendingCommand = true;
+    heaterToggle.disabled = true;
+    showLoading("Commande en cours....");
 
     try{
+      await startCommandTimeout();
+
       await sendMQTTMEssage("chauffage", isOn);
+
       setTemperature(isOn ? 21: 16); // Example temperature when heater is OFF
     } catch(err){
+      clearCommandTimeout();
+      pendingCommand = false;
+      heaterToggle.disabled = false;
       if(err.name !== "MqttLimitError" ){
         console.log("Erreur chauffage;", err);
         showError("Impossible de changer l'etat du chauffage");
+        hideLoading();
       }
       heaterToggle.checked = !isOn;
     }
@@ -40,13 +52,19 @@ function showMessage(type, message, duration = 3500) {
 
   if(!messageBox) return;
 
+  if(!messageBox.classList.contains('hidden')){
+    messageBox.classList.add('hidden');
+  }
+
   messageBox.className = "message " + type;
   messageBox.innerText = message;
   messageBox.classList.remove('hidden');
 
-  setTimeout(() => {
-    messageBox.classList.add('hidden');
-  }, duration);
+  if( type != "loading"){
+    setTimeout(() => {
+      messageBox.classList.add('hidden');
+    }, duration);
+  }
 }
 
 function showError(message, duration) {
@@ -55,6 +73,14 @@ function showError(message, duration) {
 
 function showWarning(message, duration) {
     showMessage("warning",message,duration);
+}
+
+function showLoading(message){
+    showMessage("loading",message);
+}
+
+function hideLoading(){
+  document.getElementById("message-box").classList.add('hidden');
 }
 
 function showHelp() {
@@ -154,3 +180,4 @@ function setActiveTab(tabId){
 function setTemperature(value){
   document.querySelector('.temp-value').textContent = value;
 }
+
