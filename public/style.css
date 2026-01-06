@@ -160,6 +160,7 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.25);
       z-index: 20;
       animation: slideDown 0.3s ease;
+      white-space: nowrap;
     }
 
     .message.error {
@@ -173,8 +174,13 @@
     }
 
     .message.loading {
+      background-color: #A8E6CF;
+      color: #004D00;
+    }
+
+    .message.success {
       background-color: #34c759;
-      color: #1C1C1E;
+      color: white;
     }
 
     .hidden {
@@ -306,6 +312,24 @@
     .btn.danger{
       background: #FF3B30;
       color: white;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1.8px solid transparent;
+      border-top-color: currentColor;
+      border-right-color: currentColor;
+      animation: spin 0.6s linear infinite;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { 
+        transform: rotate(360deg); 
+      }
     }
 
     @keyframes slideDown {

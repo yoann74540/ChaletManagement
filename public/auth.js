@@ -153,7 +153,7 @@ function subscribeHeaterState(){
         if(pendingCommand){
           clearCommandTimeout();
           pendingCommand = false;
-          hideLoading();
+          showSuccess("Commande effectuée avec succès");
           heaterToggle.disabled = false;
         }
       }

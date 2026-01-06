@@ -27,7 +27,7 @@ if (heaterToggle) {
       if(err.name !== "MqttLimitError" ){
         console.log("Erreur chauffage;", err);
         showError("Impossible de changer l'etat du chauffage");
-        hideLoading();
+        hideMessage();
       }
       heaterToggle.checked = !isOn;
     }
@@ -52,18 +52,19 @@ function showMessage(type, message, duration = 3500) {
 
   if(!messageBox) return;
 
-  if(!messageBox.classList.contains('hidden')){
-    messageBox.classList.add('hidden');
-  }
-
   messageBox.className = "message " + type;
-  messageBox.innerText = message;
   messageBox.classList.remove('hidden');
 
   if( type != "loading"){
+    messageBox.innerText = message;
     setTimeout(() => {
       messageBox.classList.add('hidden');
     }, duration);
+  }else{
+    messageBox.innerHTML = `
+      <span class="spinner"></span>
+      <span>${message}</span>
+      `;
   }
 }
 
@@ -79,7 +80,11 @@ function showLoading(message){
     showMessage("loading",message);
 }
 
-function hideLoading(){
+function showSuccess(message, duration){
+    showMessage("success",message,duration);
+}
+
+function hideMessage(){
   document.getElementById("message-box").classList.add('hidden');
 }
 
