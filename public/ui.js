@@ -100,7 +100,6 @@ function showHome() {
   document.getElementById('help-modal').style.display = 'none';
   document.getElementById('auth').style.display = 'block';
   document.getElementById('settings-panel').style.display ='none';
-  //document.getElementById('confirm-logout').style.display='none';
 
   //active le bouton home
   document.getElementById('homeBtn').classList.add('active');
@@ -111,6 +110,7 @@ function showgauge() {
   document.getElementById('auth').style.display = 'none';
   document.getElementById('gauge-modal').style.display = 'block';
   document.getElementById('settings-panel').style.display ='none';
+  document.getElementById("confirm-logout").classList.add("hidden");
 
   document.getElementById('gaugeBtn').classList.add('active');
   document.getElementById('calendarBtn').classList.remove('active');
@@ -122,6 +122,7 @@ function showSettings() {
   document.getElementById('gauge-modal').style.display = 'none';
   document.getElementById('settings-panel').style.display ='block';
 
+  document.getElementById("confirm-logout").classList.add("hidden");
   document.getElementById('gaugeBtn').classList.remove('active');
   document.getElementById('calendarBtn').classList.remove('active');
   document.getElementById('gearBtn').classList.add('active');
@@ -132,6 +133,7 @@ function showCalendar() {
   document.getElementById('gauge-modal').style.display = 'none';
   document.getElementById('settings-panel').style.display ='none';
 
+  document.getElementById("confirm-logout").classList.add("hidden");
   document.getElementById('gaugeBtn').classList.remove('active');
   document.getElementById('calendarBtn').classList.add('active');
   document.getElementById('gearBtn').classList.remove('active');
