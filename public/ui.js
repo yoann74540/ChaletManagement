@@ -47,6 +47,19 @@ document.getElementById("cancelLogoutBtn").addEventListener("click", () =>{
   document.getElementById('settings-panel').style.display ='block';
 });
 
+const historyBtn = document.getElementById("historyBtn");
+if(historyBtn){
+  historyBtn.addEventListener("click", () =>{
+    document.getElementById("history-modal").classList.remove("hidden");
+    document.getElementById('settings-panel').style.display ='none';
+  });
+}
+
+document.getElementById("cancelHistory").addEventListener("click", () =>{
+  document.getElementById("history-modal").classList.add("hidden");
+  document.getElementById('settings-panel').style.display ='block';
+});
+
 function showMessage(type, message, duration = 3500) {
   const messageBox = document.getElementById("message-box");
 
@@ -111,6 +124,7 @@ function showgauge() {
   document.getElementById('gauge-modal').style.display = 'block';
   document.getElementById('settings-panel').style.display ='none';
   document.getElementById("confirm-logout").classList.add("hidden");
+  document.getElementById("history-modal").classList.add("hidden");
 
   document.getElementById('gaugeBtn').classList.add('active');
   document.getElementById('calendarBtn').classList.remove('active');
@@ -121,7 +135,8 @@ function showSettings() {
   document.getElementById('auth').style.display = 'none';
   document.getElementById('gauge-modal').style.display = 'none';
   document.getElementById('settings-panel').style.display ='block';
-
+  
+  document.getElementById("history-modal").classList.add("hidden");
   document.getElementById("confirm-logout").classList.add("hidden");
   document.getElementById('gaugeBtn').classList.remove('active');
   document.getElementById('calendarBtn').classList.remove('active');
@@ -133,6 +148,7 @@ function showCalendar() {
   document.getElementById('gauge-modal').style.display = 'none';
   document.getElementById('settings-panel').style.display ='none';
 
+  document.getElementById("history-modal").classList.add("hidden");
   document.getElementById("confirm-logout").classList.add("hidden");
   document.getElementById('gaugeBtn').classList.remove('active');
   document.getElementById('calendarBtn').classList.add('active');

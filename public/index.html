@@ -74,6 +74,10 @@
     </div>
 
     <div id="settings-panel" class="hidden">
+      <button class="parameter-btn primary" id="historyBtn">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        Historique
+      </button>
       <button class="parameter-btn danger" id="logoutBtn">
         <i class="fa-solid fa-right-from-bracket"></i>
         Se déconnecter
@@ -89,6 +93,17 @@
         </div> 
       </div>
     </div>
+
+    <div id="history-modal" class="hidden">
+      <h2>Historique</h2>
+      <div class="history-list">
+        <!-- Contenu de l'historique chargé dynamiquement -->
+      </div>
+      <div class="confirm-actions">
+        <button class="btn primary" id="cancelHistory">Fermer</button>
+      </div>
+    </div>
+
   </div>
 
   <div id="message-box" class="message hidden"></div>
