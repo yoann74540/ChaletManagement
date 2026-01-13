@@ -120,7 +120,6 @@
     }
 
     .btn {
-      flex: 1;
       padding: 14px;
       border-radius: 10px;
       border: none;
@@ -143,8 +142,29 @@
       color: #004D00;
       transition: background-color 0.2s ease;
     }
+
     .btn.secondary:active {
       background-color: #81C784;
+    }
+
+    .btn.red {
+      background:#FF3B30;
+      color: white;
+    }
+
+    .btn.margin-top {
+      margin-top: 14px;
+    }
+
+    .btn.main {
+      flex: 1;
+    }
+
+    .btn.parameter {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap:10px;
     }
 
     .message {
@@ -277,29 +297,6 @@
       margin-top: 6px;
     }
 
-    .parameter-btn{
-      width: 100%;
-      padding: 14px;
-      font-size: 15px;
-      border-radius: 12px;
-      border: none;
-      display: flex;
-      align-items: center;
-      gap:10px;
-      cursor: pointer;
-    }
-
-    .parameter-btn.danger{
-      margin-top: 14px;
-      background:#FF3B30;
-      color: white;
-    }
-
-    .parameter-btn.primary{
-      background:#A8E6CF;
-      color: #004D00;
-    }
-
     confirm-box{
       width: 90%;
       max-width: 320px;
@@ -307,17 +304,6 @@
       border-radius: 16px;
       padding: 20px;
       text-align: center;
-    }
-
-    .confirm-actions{
-      display: flex;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .btn.danger{
-      background: #FF3B30;
-      color: white;
     }
 
     .history-list {

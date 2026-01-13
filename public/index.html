@@ -50,8 +50,8 @@
       <input type="password" placeholder="Mot de passe" id="password" autocomplete="current-password">
 
       <div class="buttons">
-        <button class="btn primary" id="loginBtn">Se connecter</button>
-        <button class="btn secondary" id="signupBtn">Créer un compte</button>
+        <button class="btn primary main" id="loginBtn">Se connecter</button>
+        <button class="btn secondary main" id="signupBtn">Créer un compte</button>
       </div>
     </div>
 
@@ -74,24 +74,22 @@
     </div>
 
     <div id="settings-panel" class="hidden">
-      <button class="parameter-btn primary" id="historyBtn">
+      <button class="btn primary parameter" id="historyBtn">
         <i class="fa-solid fa-clock-rotate-left"></i>
         Historique
       </button>
-      <button class="parameter-btn danger" id="logoutBtn">
+      <button class="btn red parameter margin-top" id="logoutBtn">
         <i class="fa-solid fa-right-from-bracket"></i>
         Se déconnecter
       </button>
     </div>
 
     <div id="confirm-logout" class="hidden">
-      <div class="confirm-box">
-        <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
-        <div class="confirm-actions">
-          <button class="btn trois" id="cancelLogoutBtn">Annuler</button>
-          <button class="btn danger" id="confirmLogoutBtn">Se déconnecter</button>
-        </div> 
-      </div>
+      <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+      <div class="buttons">
+        <button class="btn primary main" id="cancelLogoutBtn">Annuler</button>
+        <button class="btn red main" id="confirmLogoutBtn">Se déconnecter</button>
+      </div> 
     </div>
 
     <div id="history-modal" class="hidden">
@@ -99,8 +97,8 @@
       <div class="history-list">
         <!-- Contenu de l'historique chargé dynamiquement -->
       </div>
-      <div class="confirm-actions">
-        <button class="btn primary" id="cancelHistory">Fermer</button>
+      <div class="buttons">
+        <button class="btn primary main" id="cancelHistory">Fermer</button>
       </div>
     </div>
 
