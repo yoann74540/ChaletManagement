@@ -54,11 +54,6 @@
       z-index: 10;
     }
 
-    .fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-
     .tab {
       background: none;
       border: none;
@@ -81,7 +76,7 @@
     }
 
     /* CONTAINER AUTH */
-    #auth, #gauge-modal, #settings-panel, #confirm-logout, #history-modal {
+    .panel {
       max-width: 360px;
       width: 100%;
       padding: 24px;
@@ -94,14 +89,14 @@
     }
 
     /* TITRE */
-    #auth h2, #gauge-modal h2, #settings-panel h2, #confirm-logout h2, #history-modal h2 {
+    .panel h2 {
       margin-bottom: 20px;
       font-size: 26px;
       color: #1C1C1E;
     }
 
     /* INPUTS */
-    #auth input, #gauge-modal input, #settings-panel input, #confirm-logout input, #history-modal input {
+    .panel input {
       width: 100%;
       padding: 14px;
       margin-bottom: 14px;
@@ -295,15 +290,6 @@
       font-size: 14px;
       color: #1C1C1E;
       margin-top: 6px;
-    }
-
-    confirm-box{
-      width: 90%;
-      max-width: 320px;
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
     }
 
     .history-list {
