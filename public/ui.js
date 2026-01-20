@@ -19,7 +19,6 @@ if (heaterToggle) {
 
       await sendMQTTMEssage("chauffage", isOn);
 
-      setTemperature(isOn ? 21: 16); // Example temperature when heater is OFF
     } catch(err){
       clearCommandTimeout();
       pendingCommand = false;
@@ -205,6 +204,24 @@ function setActiveTab(tabId){
 
 function setTemperature(value){
   document.querySelector('.temp-value').textContent = value;
+}
+
+function setTemperatureDate(GetDate){
+
+  let date = "";
+
+  date = GetDate.toDate();
+
+  const formattedDate = date.toLocaleDateString('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }) + " à " + date.toLocaleTimeString('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
+  document.querySelector('.temp-date').textContent = 'Le ' + formattedDate;
 }
 
 function renderHistory(items){

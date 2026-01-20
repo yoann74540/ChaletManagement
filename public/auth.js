@@ -16,6 +16,7 @@ const db = firebase.firestore();
 
 let pageInitialized = false;
 let unsubscribeHeater = null;
+let historyRef = null;
 
 let pendingCommand = false;
 let commandTimeout = null;
@@ -107,6 +108,7 @@ auth.onAuthStateChanged(async (user) => {
     renderBottomBar(user);
     updateData();
     subscribeHeaterState();
+    subscribeLasTemperature();
 
   } catch(error){
     showError("Erreur lors de la vérification des droits d'accès. Contactez l'administrateur.");  
@@ -118,6 +120,7 @@ auth.onAuthStateChanged(async (user) => {
 async function signOutAndRedirect() {
   try{
     cleanupSubsriptionHeaterState();
+    cleanupSubscriptionLastTemperature();
     await auth.signOut();
     renderBottomBar(null);
     console.log('User signed out successfully');
@@ -165,6 +168,26 @@ function cleanupSubsriptionHeaterState(){
     unsubscribeHeater();
     unsubscribeHeater = null;
   }
+}
+
+async function subscribeLasTemperature(){
+  historyRef =  db.collection("system").doc("global").collection("history").where("type", "==", "temperature").orderBy("createdAt", "desc").limit(1).onSnapshot((snapshot) => {
+    if(!snapshot.empty){
+      const doc = snapshot.docs[0];
+      const state = doc.data();
+      setTemperature(state.value);
+      setTemperatureDate(state.createdAt);
+    }
+  }, (error) => {
+    console.error("Erreur lors de la souscription à la dernière température", error);
+  });
+}
+
+function cleanupSubscriptionLastTemperature(){
+  if(historyRef){
+    historyRef();
+    historyRef = null;
+  } 
 }
 
 async function startCommandTimeout(){
