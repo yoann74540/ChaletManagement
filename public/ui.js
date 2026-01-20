@@ -49,9 +49,12 @@ document.getElementById("cancelLogoutBtn").addEventListener("click", () =>{
 
 const historyBtn = document.getElementById("historyBtn");
 if(historyBtn){
-  historyBtn.addEventListener("click", () =>{
+  historyBtn.addEventListener("click", async () =>{
     document.getElementById("history-modal").classList.remove("hidden");
     document.getElementById('settings-panel').style.display ='none';
+    document.getElementById("history-modal").querySelector(".history-container").scrollTop = 0;
+    showLoading("Chargement de l'historique...");
+    await loadHistory();
   });
 }
 
@@ -204,3 +207,59 @@ function setTemperature(value){
   document.querySelector('.temp-value').textContent = value;
 }
 
+function renderHistory(items){
+  const container = document.getElementById("history-list");
+  container.innerHTML = "";
+
+  if( items.length === 0 ){
+    container.innerHTML = "<p>Aucun historique disponible.</p>";
+    return;
+  }
+
+  items.forEach(item => {
+    const div = document.createElement("div");
+
+    let date = "";
+
+    date = item.createdAt.toDate();
+
+    const formattedDate = date.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    }) + " à " + date.toLocaleTimeString('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    let content = "";
+
+    if(item.type === "heater"){
+      content = `
+        <div class="history-title">
+          Chauffage : ${item.value === true ? "activé" : "désactivé"}
+        </div>
+      `;
+    }
+
+    if(item.type === "temperature"){
+      content = `
+        <div class="history-title">
+          Température interieur : ${item.value}°C
+        </div>
+      `;
+    }
+
+    div.innerHTML = `
+      <div class= "history-item">
+        ${content}
+        <div class="history-date">
+          ${formattedDate}
+        </div>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+
+}

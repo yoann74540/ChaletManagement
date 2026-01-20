@@ -186,3 +186,36 @@ function clearCommandTimeout(){
     commandTimeout = null;
   }
 }
+
+async function loadHistory(){
+  try{
+
+    const historyRef = await db
+        .collection("system")
+        .doc("global")
+        .collection("history")
+        .orderBy("createdAt", "desc")
+        .limit(10)
+
+
+    const snapshot = await historyRef.get();
+
+    console.log("Nombre de documents dans l'historique :", snapshot.size);
+
+    snapshot.docs.forEach(doc => {
+      console.log(doc.id, " => ", doc.data());
+    });
+    
+    const historyData = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data() 
+    }));
+
+    renderHistory(historyData);
+
+    hideMessage();
+  } catch(error){
+    console.error("Erreur lors du chargement de l'historique", error);
+    showWarning("Impossible de charger l'historique des commandes");
+  }
+}
