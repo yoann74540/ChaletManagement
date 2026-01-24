@@ -29,7 +29,7 @@
       height: 100%;
 
       padding-top: env(safe-area-inset-top);
-      padding-bottom: calc(20px + env(safe-area-inset-bottom) + 60px);
+      padding-bottom: calc(20px + env(safe-area-inset-bottom) + 45px);
 
       box-sizing: border-box;
     }
@@ -41,12 +41,12 @@
       left: 0;
       width: 100%;
 
-      height: 60px;
+      height: 45px;
       padding-bottom: env(safe-area-inset-bottom);
 
       display: flex;
       justify-content: space-around;
-      align-items: center;
+      align-items: flex-end;
 
       background-color: #A8E6CF;
       border-top: 1px solid rgba(0,0,0,0.15);
@@ -59,10 +59,21 @@
       border: none;
       font-size: 22px;
       color: #004D00;
+      display: flex;
+      flex-direction: column !important;
+      gap: 2px;
     }
 
     .tab.active {
       color: #007AFF; /* bleu iOS */
+    }
+
+    .tab-label {
+      font-size: 11px;
+      line-height: 1;
+      margin-top: 2px;
+      color: inherit;
+      font-weight: 800;
     }
 
     .history-item {
@@ -96,7 +107,7 @@
 
     .background {
       position: absolute;
-      inset: 0 calc(0px) calc(env(safe-area-inset-bottom) + 60px) 0;
+      inset: 0 calc(0px) calc(env(safe-area-inset-bottom) + 45px) 0;
       background-image: url('picture/Chalet_picture.webp');
       background-size: cover;
       background-position: center;
@@ -194,17 +205,27 @@
     .message {
       position: fixed;
       top: calc(env(safe-area-inset-top)+10px);
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 90%;
-      padding: 14px 18px;
+      left: 0;
+      right: 0;
+
+      margin: 0 auto;
+      width: fit-content;
+      max-width: min(320px, calc(100vw - 40px));
+
+      padding: 14px 12px;
       border-radius: 12px;
       font-size: 15px;
       text-align: center;
+
       box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      box-sizing: border-box;
       z-index: 20;
-      animation: slideDown 0.3s ease;
-      white-space: nowrap;
+
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: break-word;
+
+      animation: slideDown 0.3s ease-out;
     }
 
     .message.error {
@@ -348,10 +369,10 @@
     @keyframes slideDown {
       from {
         opacity: 0;
-        transform: translate(-50%, -20px);
+        transform: translateY(-12px);
       }
       to {
         opacity: 1;
-        transform: translateX(-50%, 0);
+        transform: translateY(0);
       }
     }

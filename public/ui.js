@@ -163,7 +163,7 @@ function renderBottomBar(user){
   bar.innerHTML = "";
 
   if(!user){
-    bar.innerHTML = "<button class=\"tab active\" id=\"homeBtn\"><i class=\"fa-solid fa-house\"></i></button><button class=\"tab\" id=\"helpBtn\"><i class=\"fa-solid fa-circle-info\"></i></button>";
+    bar.innerHTML = "<button class=\"tab active\" id=\"homeBtn\"><i class=\"fa-solid fa-house\"></i><span class=\"tab-label\">Accueil</span></button><button class=\"tab\" id=\"helpBtn\"><i class=\"fa-solid fa-circle-info\"></i><span class=\"tab-label\">Aide</span></button>";
     document.getElementById('homeBtn').addEventListener("click", () => {
       setActiveTab("homeBtn");
       showHome();
@@ -176,7 +176,7 @@ function renderBottomBar(user){
     setActiveTab("homeBtn");
     showHome();
   }else{
-    bar.innerHTML = "<button class=\"tab active\" id=\"gaugeBtn\"><i class=\"fa-solid fa-gauge-high\"></i></button><button class=\"tab\" id=\"calendarBtn\"><i class=\"fa-solid fa-calendar\"></i></button><button class=\"tab\" id=\"gearBtn\"><i class=\"fa-solid fa-gear\"></i></button>";
+    bar.innerHTML = "<button class=\"tab active\" id=\"gaugeBtn\"><i class=\"fa-solid fa-gauge-high\"></i><span class=\"tab-label\">Pilotage</span></button><button class=\"tab\" id=\"calendarBtn\"><i class=\"fa-solid fa-calendar\"></i><span class=\"tab-label\">Calendrier</span></button><button class=\"tab\" id=\"gearBtn\"><i class=\"fa-solid fa-gear\"></i><span class=\"tab-label\">Paramètres</span></button>";
     
     document.getElementById('gaugeBtn').addEventListener("click", () => {
       setActiveTab("gaugeBtn");
