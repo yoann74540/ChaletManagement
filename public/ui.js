@@ -1,4 +1,6 @@
 
+let messageTimeout = null;
+
 document.addEventListener("DOMContentLoaded", () => {
   renderBottomBar(null);
 });
@@ -15,13 +17,12 @@ if (heaterToggle) {
     showLoading("Commande en cours....");
 
     try{
-      await startCommandTimeout();
+      startCommandTimeout();
 
       await sendMQTTMEssage("chauffage", isOn);
 
     } catch(err){
       clearCommandTimeout();
-      pendingCommand = false;
       heaterToggle.disabled = false;
       if(err.name !== "MqttLimitError" ){
         console.log("Erreur chauffage;", err);
@@ -67,12 +68,17 @@ function showMessage(type, message, duration = 3500) {
 
   if(!messageBox) return;
 
+  if(messageTimeout){
+    clearTimeout(messageTimeout);
+    messageTimeout = null;
+  }
+
   messageBox.className = "message " + type;
   messageBox.classList.remove('hidden');
 
   if( type != "loading"){
     messageBox.innerText = message;
-    setTimeout(() => {
+    messageTimeout = setTimeout(() => {
       messageBox.classList.add('hidden');
     }, duration);
   }else{

@@ -20,6 +20,7 @@ let historyRef = null;
 
 let pendingCommand = false;
 let commandTimeout = null;
+let lastknownHeaterState = null;
 
 auth.setPersistence(
   firebase.auth.Auth.Persistence.NONE
@@ -153,9 +154,9 @@ function subscribeHeaterState(){
         let value = false;
         value = (state.heater == "ON") ? true : false;
         heaterToggle.checked = !!value;
+        lastknownHeaterState = heaterToggle.checked;
         if(pendingCommand){
           clearCommandTimeout();
-          pendingCommand = false;
           showSuccess("Commande effectuée avec succès");
           heaterToggle.disabled = false;
         }
@@ -190,13 +191,16 @@ function cleanupSubscriptionLastTemperature(){
   } 
 }
 
-async function startCommandTimeout(){
+function startCommandTimeout(){
   clearTimeout(commandTimeout);
 
   commandTimeout = setTimeout(() => {
     console.log("Erreur timeout , time_id =",commandTimeout);
-    throw new Error("Timeout");
-  }, 8000);
+    clearCommandTimeout();
+    showWarning("Délai d'attente de la commande dépassée. Impossible de joindre le systeme");
+    heaterToggle.checked = lastknownHeaterState;
+    heaterToggle.disabled = false;
+  }, 10000);
 
   console.log("Start timer, time_id =",commandTimeout);
 
@@ -204,7 +208,8 @@ async function startCommandTimeout(){
 
 function clearCommandTimeout(){
   if(commandTimeout !== null){
-     console.log("Clear timer, time_id =",commandTimeout);
+    pendingCommand = false;
+    console.log("Clear timer, time_id =",commandTimeout);
     clearTimeout(commandTimeout);
     commandTimeout = null;
   }
