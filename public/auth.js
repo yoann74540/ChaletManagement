@@ -200,7 +200,7 @@ function startCommandTimeout(){
     showWarning("Délai d'attente de la commande dépassée. Impossible de joindre le systeme");
     heaterToggle.checked = lastknownHeaterState;
     heaterToggle.disabled = false;
-  }, 10000);
+  }, 20000);
 
   console.log("Start timer, time_id =",commandTimeout);
 
