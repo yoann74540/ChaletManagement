@@ -16,7 +16,7 @@ async function sendMQTTMEssage(topic, message){
 
         const token = await user.getIdToken();
 
-        const res = await fetch(
+        const res = await retryFetch(
             "https://mqtt-server-production-00a0.up.railway.app/heater",
             {
                 method: "POST",
@@ -52,4 +52,37 @@ async function sendMQTTMEssage(topic, message){
             throw new Error("Erreur envoie mqtt");
         }
     }
+}
+
+async function retryFetch(url, options, retries = 3, baseDelay = 1000) {
+  let attempt = 0;
+  let delay = baseDelay;
+
+  while (true) {
+    try {
+      const response = await fetch(url, options);
+
+      if (response.ok) {
+        return response;
+      }
+
+      if (response.status >= 500 && attempt < retries) {
+        console.log("retryFetch response error", response.status, "retrying in", delay, "ms");
+        attempt += 1;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        delay *= 2;
+        continue;
+      }
+
+      return response;
+    } catch (err) {
+      console.log("retryFetch Error number retries", attempt, "error:", err);
+      if (attempt >= retries) {
+        throw err;
+      }
+      attempt += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      delay *= 2;
+    }
+  }
 }
